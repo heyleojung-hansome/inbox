@@ -73,20 +73,21 @@ button:focus-visible{outline:3px solid var(--accent2);outline-offset:2px;}
 
 /* ---------- 운전대 & 페달 ---------- */
 #ctl{position:absolute;left:0;right:0;bottom:0;padding:0 16px calc(env(safe-area-inset-bottom,0px) + 18px);display:flex;justify-content:space-between;align-items:flex-end;pointer-events:none;}
-#wheelZone{width:170px;height:170px;pointer-events:auto;touch-action:none;display:flex;align-items:center;justify-content:center;}
-#wheel{width:150px;height:150px;border-radius:50%;filter:drop-shadow(0 8px 14px rgba(0,0,0,.35));will-change:transform;}
+:root{--wheel:clamp(210px,46vmin,320px);}
+#wheelZone{width:calc(var(--wheel) + 36px);height:calc(var(--wheel) + 36px);margin:0 0 -18px -18px;pointer-events:auto;touch-action:none;display:flex;align-items:center;justify-content:center;}
+#wheel{width:var(--wheel);height:var(--wheel);border-radius:50%;filter:drop-shadow(0 8px 14px rgba(0,0,0,.35));will-change:transform;}
 #wheel svg{width:100%;height:100%;display:block;}
 .pads{display:flex;flex-direction:column;align-items:flex-end;gap:12px;pointer-events:auto;}
 .pads .row{display:flex;gap:12px;align-items:flex-end;}
-.pedal{width:74px;height:112px;border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:16px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.35);
+.pedal{width:82px;height:124px;border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:16px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.35);
   box-shadow:0 7px 0 rgba(0,0,0,.28),0 12px 20px rgba(0,0,0,.25),inset 0 2px 0 rgba(255,255,255,.35);touch-action:none;transition:transform .06s,box-shadow .06s;}
 .pedal .ic{font-size:30px;line-height:1;}
-.pedal.gas{background:linear-gradient(180deg,#5ad67a,#22a64a);height:128px;}
+.pedal.gas{background:linear-gradient(180deg,#5ad67a,#22a64a);height:142px;}
 .pedal.brake{background:linear-gradient(180deg,#ff7b7b,#d9363e);}
 .pedal.on{transform:translateY(6px);box-shadow:0 1px 0 rgba(0,0,0,.28),0 4px 10px rgba(0,0,0,.25),inset 0 2px 0 rgba(255,255,255,.2);filter:brightness(.95);}
 .cbtn{width:68px;height:68px;border-radius:50%;background:linear-gradient(180deg,#ffe9a3,#ffcf4d);font-size:30px;box-shadow:0 5px 0 #c99a1a,0 8px 14px rgba(0,0,0,.25),inset 0 2px 0 rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;touch-action:none;}
 .cbtn.on{transform:translateY(4px);box-shadow:0 1px 0 #c99a1a;filter:brightness(.92);}
-@media (max-width:520px){#wheelZone{width:140px;height:140px}#wheel{width:122px;height:122px}.pedal{width:64px;height:98px;font-size:14px}.pedal.gas{height:112px}.pedal .ic{font-size:26px}.cbtn{width:58px;height:58px;font-size:26px}}
+@media (max-width:520px){:root{--wheel:clamp(170px,44vmin,240px);}.pedal{width:70px;height:108px;font-size:14px}.pedal.gas{height:122px}.pedal .ic{font-size:26px}.cbtn{width:60px;height:60px;font-size:26px}}
 @media (prefers-reduced-motion:reduce){#msg,#gGo,.vcard{transition:none}#loading .car{animation:none}}
 </style>
 
@@ -830,7 +831,7 @@ function updateCar(dt){
   sfx.engine(clamp(sp/v.max*0.75+ctrl.throttle*0.25,0,1),true);
 }
 function drawGauge(){
-  const R=vw<520?40:50, cx=vw/2, cy=vh-(vw<520?58:70), sp=Math.abs(car.speed)*3.6, ratio=clamp(sp/(car.v.max*3.6),0,1);
+  const narrow=vw<640, R=narrow?34:50, cx=vw/2, cy=narrow?118:vh-74, sp=Math.abs(car.speed)*3.6, ratio=clamp(sp/(car.v.max*3.6),0,1);
   const a0=Math.PI*0.75, a1=Math.PI*2.25;
   fxc.save(); fxc.translate(cx,cy);
   fxc.beginPath(); fxc.arc(0,0,R+10,0,TAU); fxc.fillStyle='rgba(20,30,45,.55)'; fxc.fill();
